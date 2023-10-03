@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BiGwiki</title>
+        <link rel="stylesheet" href="/static/style.css">
+        <link rel="stylesheet" href="/static/sidebar.css">
+    </head>
+    <body>
+        <a href="/" target="_top"><h1>{{ wikiname }}</h1></a>
+        <div id="pages">
+
+        </div>
+
+        <script type="text/javascript">
+
+            const pages = {{ pages|safe }};
+
+            const pageList = document.getElementById("pages");
+
+            function dropdownOnClick(event) {
+                event.target.classList.toggle("dropdown-showing");
+            }
+
+            function addPagesToElement(pages, element, path = "/") {
+                pages.forEach((value, index, array) => {
+                if (value instanceof Array) {
+                    let listElement = document.createElement("div");
+                    listElement.innerText = value[0];
+                    listElement.classList.add("page-dropdown");
+                    listElement.onclick = dropdownOnClick;
+                    element.appendChild(listElement);
+                    addPagesToElement(value[1], listElement, path + value[0] + "/");
+                } else {
+                    pageElement = document.createElement("a");
+                    pageElement.innerText = value;
+                    pageElement.href = path + value;
+                    pageElement.target = "_top";
+                    pageElement.classList.add("page");
+                    element.appendChild(pageElement);
+                }
+            });
+            }
+
+            addPagesToElement(pages, pageList);
+
+        </script>
+
+    </body>
+</html>

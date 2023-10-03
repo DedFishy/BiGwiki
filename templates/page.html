@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ wikiname }}</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <iframe id="sidebar" src="/sidebar"></iframe>
+
+        <div id="content">
+            {{ content|safe }}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,34 @@
+:root {
+    --sidebar-width: 20vw;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    color: white;
+    font-family: sans-serif;
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 0 8px 4px black;
+    z-index: 2;
+}
+
+#content {
+    background-color: #161616;
+    flex-grow: 1;
+    padding: 8px;
+}
