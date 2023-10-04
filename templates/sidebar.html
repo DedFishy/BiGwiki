@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>BiGwiki</title>
+        <title>sidebar</title>
         <link rel="stylesheet" href="/static/style.css">
         <link rel="stylesheet" href="/static/sidebar.css">
     </head>
@@ -14,6 +14,7 @@
         <script type="text/javascript">
 
             const pages = {{ pages|safe }};
+            const toppath = parent.window.location.pathname;
 
             const pageList = document.getElementById("pages");
 
@@ -26,10 +27,17 @@
                 if (value instanceof Array) {
                     let listElement = document.createElement("div");
                     listElement.innerText = value[0];
+
+                    if (toppath.includes(listElement.innerText)) {
+                        listElement.classList.add("dropdown-showing");
+                    }
                     listElement.classList.add("page-dropdown");
                     listElement.onclick = dropdownOnClick;
+                    let listElementContent = document.createElement("div");
+                    listElementContent.classList.add("page-dropdown-content");
+                    listElement.appendChild(listElementContent);
                     element.appendChild(listElement);
-                    addPagesToElement(value[1], listElement, path + value[0] + "/");
+                    addPagesToElement(value[1], listElementContent, path + value[0] + "/");
                 } else {
                     pageElement = document.createElement("a");
                     pageElement.innerText = value;

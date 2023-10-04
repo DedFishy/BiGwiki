@@ -1,5 +1,6 @@
 :root {
-    --entry-text-height: 1.5em;
+    --entry-text-height: 20px;
+    --dropdown-title-height: 25px;
 }
 
 body {
@@ -9,22 +10,59 @@ body {
 h1, h2, h3, h4, h5, h6 {
     margin: 2px;
     padding: 0;
+    font-size: 50px;
+    height: fit-content;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
 }
 
 #pages {
     user-select: none;
 }
+a {
+    font-size: var(--entry-text-height);
+    height: fit-content;
+    text-shadow: 1px 1px 0 rgb(73, 73, 73);
+    transition: 0.2s;
+    font-weight: bold;
+}
+a:hover {
+    text-shadow: 4px 4px 0 rgb(73, 73, 73);
+}
 
 .page-dropdown {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 4px;
+    font-size: var(--dropdown-title-height);
 }
-.page-dropdown a {
+.page-dropdown::before {
+    content: ">";
+    width: fit-content;
+    display:block;
+    transition: 0.2s;
+    padding-right: 4px;
+    transform: translateY(3px);
+}
+.page-dropdown.dropdown-showing::before {
+    transform: rotateZ(90deg) translateX(4px) translateY(4px);
+}
+.page-dropdown .page-dropdown-content {
+    width: 100%;
+}
+.page-dropdown .page-dropdown-content a {
     height: 0;
     overflow: hidden;
     transition: 0.2s;
+    display: block;
 }
 
-.page-dropdown.dropdown-showing a {
-    height: var(--entry-text-height);
+.page-dropdown.dropdown-showing .page-dropdown-content a {
+    height: calc(var(--entry-text-height) + 4px);
+    font-size: var(--entry-text-height);
+
 }

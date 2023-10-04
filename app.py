@@ -40,6 +40,7 @@ class App:
         
         @self.app.route("/<path:page>")
         def render_page(page):
+            print(str(page))
             return render_template("page.html" , wikiname=self.wiki_name, content=self.read_md_file(page + ".md"))
     
     def run(self, host, port):
