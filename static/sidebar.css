@@ -3,14 +3,29 @@
     --dropdown-title-height: 25px;
 }
 
-body {
+html, body {
     flex-direction: column;
+    background: linear-gradient(153deg, rgba(0,0,0,0.8799894957983193) 0%, rgba(60,60,60,0.5802696078431373) 100%);
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
 }
 
+#header {
+    display: flex;
+    flex-direction: row;
+    font-size: 50px;
+}
+#header img {
+    height: 50px;
+}
+h1 {
+    font-size: 50px;
+}
 h1, h2, h3, h4, h5, h6 {
     margin: 2px;
     padding: 0;
-    font-size: 50px;
     height: fit-content;
     text-decoration: none;
 }
@@ -21,24 +36,26 @@ a {
 
 #pages {
     user-select: none;
+
 }
 a {
     font-size: var(--entry-text-height);
     height: fit-content;
-    text-shadow: 1px 1px 0 rgb(73, 73, 73);
     transition: 0.2s;
     font-weight: bold;
 }
 a:hover {
-    text-shadow: 4px 4px 0 rgb(73, 73, 73);
 }
 
 .page-dropdown {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 4px;
+    padding-left: 4px;
     font-size: var(--dropdown-title-height);
+    border-left: 2px solid white;
+    background-color: rgba(24, 0, 110, 0.5);
+    box-shadow: 0 0 4px rgb(24, 0, 110);
 }
 .page-dropdown::before {
     content: ">";
@@ -51,18 +68,36 @@ a:hover {
 .page-dropdown.dropdown-showing::before {
     transform: rotateZ(90deg) translateX(4px) translateY(4px);
 }
+.page {
+    width: 100%;
+    display: block;
+    padding-bottom: 4px;
+}
 .page-dropdown .page-dropdown-content {
     width: 100%;
-}
-.page-dropdown .page-dropdown-content a {
     height: 0;
     overflow: hidden;
-    transition: 0.2s;
-    display: block;
 }
 
-.page-dropdown.dropdown-showing .page-dropdown-content a {
-    height: calc(var(--entry-text-height) + 4px);
-    font-size: var(--entry-text-height);
+.page-dropdown.dropdown-showing .page-dropdown-content {
+    height: fit-content;
+}
 
+.page-dropdown:not(.dropdown-showing) .page-dropdown-content {
+    height: 0;
+}
+
+#login-prompt {
+    display: none;
+}
+#signup-prompt {
+    display: none;
+}
+.showing-prompt {
+    display: block !important;
+}
+
+.username {
+    font-size: 20px;
+    display: inline;
 }

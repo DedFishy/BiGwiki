@@ -8,7 +8,25 @@
         <iframe id="sidebar" src="/sidebar"></iframe>
 
         <div id="content">
+            <div id="content-header">
+                <div id="page-title">{{ pagename|safe }}</div>
+                <div class="permission-level-1">
+                    <button onclick="">edit</button>
+                </div>
+            </div>
             {{ content|safe }}
         </div>
+
+        <script type="text/javascript">
+            const permissionLevel = {{ permissionlevel|safe }};
+
+            const permissionLevels = [-1, 0, 1];
+
+            permissionLevels.forEach((level, index, array) => {
+                Array.prototype.slice.call(document.getElementsByClassName("permission-level-" + level)).forEach((value, index, array) => {
+                    value.style.display = level <= permissionLevel ? "block" : "none";
+                });
+            });
+        </script>
     </body>
 </html>

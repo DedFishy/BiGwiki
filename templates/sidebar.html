@@ -4,9 +4,36 @@
         <title>sidebar</title>
         <link rel="stylesheet" href="/static/style.css">
         <link rel="stylesheet" href="/static/sidebar.css">
+
     </head>
     <body>
-        <a href="/" target="_top"><h1>{{ wikiname }}</h1></a>
+        <a href="/" target="_top" id="header"><img src="/static/logo.png" alt="logo"><h1>{{ wikiname }}</h1></a>
+        <div id="header">
+            <div class="not-logged-in">
+                <button onclick="document.getElementById('login-prompt').classList.toggle('showing-prompt'); document.getElementById('signup-prompt').classList.remove('showing-prompt');">login</button>
+                <button onclick="document.getElementById('signup-prompt').classList.toggle('showing-prompt'); document.getElementById('login-prompt').classList.remove('showing-prompt');">signup</button>
+            </div>
+            <div class="logged-in">
+                <div class="username">{{ username }}</div>
+                <button onclick="parent.window.location.replace('/logout');">Log out</button>
+            </div>
+        </div>
+        <div id="login-prompt">
+            <form target="_top" action="/login" method="post">
+                <h6>Login</h6>
+                <input name="username" type="text" placeholder="username" autocomplete="username">
+                <input name="password" type="password" placeholder="password" autocomplete="current-password">
+                <input type="submit">
+            </form>
+        </div>
+        <div id="signup-prompt">
+            <form target="_top" action="/signup" method="post">
+                <h6>Signup</h6>
+                <input name="username" type="text" placeholder="username" autocomplete="username">
+                <input name="password" type="password" placeholder="password" autocomplete="current-password">
+                <input type="submit">
+            </form>
+        </div>
         <div id="pages">
 
         </div>
@@ -14,12 +41,15 @@
         <script type="text/javascript">
 
             const pages = {{ pages|safe }};
+            const isLoggedIn = {{ isloggedin|safe }};
             const toppath = parent.window.location.pathname;
+            const toppathSplit = toppath.split("/");
 
             const pageList = document.getElementById("pages");
 
             function dropdownOnClick(event) {
                 event.target.classList.toggle("dropdown-showing");
+                event.stopPropagation();
             }
 
             function addPagesToElement(pages, element, path = "/") {
@@ -27,10 +57,22 @@
                 if (value instanceof Array) {
                     let listElement = document.createElement("div");
                     listElement.innerText = value[0];
-
-                    if (toppath.includes(listElement.innerText)) {
+                    let fullPath = path + value[0];
+                    fullPathSplit = fullPath.split("/");
+                    var shouldOpen = true;
+                    if (toppath.replace("/", "") == "") shouldOpen = false;
+                    else {
+                        for (let i = 0; i < fullPathSplit.length; i++) {
+                            if (toppathSplit[i] != fullPathSplit[i]) {
+                                shouldOpen = false; 
+                                break;
+                            }
+                        }
+                    }
+                    if (shouldOpen) {
                         listElement.classList.add("dropdown-showing");
                     }
+
                     listElement.classList.add("page-dropdown");
                     listElement.onclick = dropdownOnClick;
                     let listElementContent = document.createElement("div");
@@ -48,6 +90,14 @@
                 }
             });
             }
+
+            Array.prototype.slice.call(document.getElementsByClassName("not-logged-in")).forEach((value, index, array) => {
+                value.style.display = isLoggedIn ? "none" : "block";
+            });
+
+            Array.prototype.slice.call(document.getElementsByClassName("logged-in")).forEach((value, index, array) => {
+                value.style.display = isLoggedIn ? "block" : "none";
+            });
 
             addPagesToElement(pages, pageList);
 
