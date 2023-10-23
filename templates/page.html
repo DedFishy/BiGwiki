@@ -8,13 +8,34 @@
         <iframe id="sidebar" src="/sidebar"></iframe>
 
         <div id="content">
-            <div id="content-header">
+            <div id="content-header" class="permission-level-1">
                 <div id="page-title">{{ pagename|safe }}</div>
-                <div class="permission-level-1">
-                    <button onclick="">edit</button>
-                </div>
+                <button onclick="showEditor()">edit</button>
+                <form method="post">
+                    <input name="path" value="{{ pagename|safe }}" hidden>
+                    <input type="submit" value="delete" onclick="this.form.action='/deletepage'">
+
+                </form>
             </div>
             {{ content|safe }}
+        </div>
+
+        <div id="edit-modal">
+            <form method="post" action="/editpage" id="editpageform">
+                <input name="path" value="{{ pagename|safe }}" hidden>
+            </form>
+            <textarea name="content" form="editpageform">{{ contentraw|safe }}</textarea>
+        </div>
+
+        <div id="add-modal">
+            <form method="post">
+                <h1>Add to: </h1> <input name="adding-to" id="adding-to"></input>
+                <input id="add-name" name="add-name" placeholder="Name...">
+                <input type='submit' value='Add Folder' onclick='this.form.action="/addfolder";' />
+                <input type='submit' value='Add Page' onclick='this.form.action="/addpage";' />
+            </form>
+            
+            <button onclick="document.getElementById('add-modal').classList.remove('showing-modal')">Cancel</button>
         </div>
 
         <script type="text/javascript">
@@ -24,7 +45,7 @@
 
             permissionLevels.forEach((level, index, array) => {
                 Array.prototype.slice.call(document.getElementsByClassName("permission-level-" + level)).forEach((value, index, array) => {
-                    value.style.display = level <= permissionLevel ? "block" : "none";
+                    value.style.display = level <= permissionLevel ? "" : "none";
                 });
             });
         </script>
