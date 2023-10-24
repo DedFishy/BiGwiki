@@ -24,6 +24,12 @@ class App:
         with open(os.path.join("md", path), "r+") as md:
             return markdown(md.read())
 
+    def read_md_raw(self, path):
+        if not os.path.exists(os.path.join("md", path)):
+            path = "special/404.md"
+        with open(os.path.join("md", path), "r+") as md:
+            return md.read()
+
     def get_pages(self, subpath=""):
         pages = os.listdir(os.path.join("md", subpath))
         if subpath == "" and "special" in pages:
@@ -214,6 +220,31 @@ class App:
 
             return self.render_error("Not found", "The folder you're trying to delete was not found.")
         
+        @self.app.route("/editpage", methods=["POST"])
+        def editpage():
+            username, token, permission_level = self.process_login()
+                
+            if permission_level < 1:
+                return self.render_error("Not allowed", "You don't have permission to edit pages!")
+
+            path = "md/" + request.form["path"] + ".md"
+            print(path)
+
+
+
+            if os.path.exists(path):
+                
+                if path != request.form["name"] + ".md":
+                    if request.form["path"] == "home" or request.form["path"].startswith("special"):
+                        return self.render_error("Not allowed", "You can't rename this page!")
+                    os.rename(path, "md/" + request.form["name"] + ".md")
+                    path = "md/" + request.form["name"] + ".md"
+                with open(path, "w") as file:
+                    file.write(request.form["content"])
+                return redirect("/" + request.form["name"])
+            
+            return self.render_error("Not found", "The page you're trying to edit was not found.")
+        
         @self.app.route("/<path:page>")
         def render_page(page):
             username, token, permission_level = self.process_login()
@@ -221,7 +252,7 @@ class App:
             if permission_level < 0:
                 return self.render_error("Not allowed", "You don't have permission to access this wiki! Try logging in to an account.")
 
-            return render_template("page.html" , wikiname=self.wiki_name, content=self.read_md_file(page + ".md"), pagename=page,  permissionlevel=permission_level)
+            return render_template("page.html" , wikiname=self.wiki_name, content=self.read_md_file(page + ".md"), contentraw=self.read_md_raw(page + ".md"), pagename=page,  permissionlevel=permission_level)
 
         
 

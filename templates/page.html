@@ -21,9 +21,15 @@
         </div>
 
         <div id="edit-modal">
-            <form method="post" action="/editpage" id="editpageform">
-                <input name="path" value="{{ pagename|safe }}" hidden>
-            </form>
+            <div id="edit-modal-buttons">
+                <button onclick="hideEditor()">cancel</button>
+                <form method="post" action="/editpage" id="editpageform" style="display: flex; flex-direction: row;">
+                    <input name="path" value="{{ pagename|safe }}" hidden>
+                    <input type="submit" value="save">
+                    <label for="name">Page name: </label>
+                    <input name="name" value="{{ pagename|safe }}" placeholder="Page name">
+                </form>
+            </div>
             <textarea name="content" form="editpageform">{{ contentraw|safe }}</textarea>
         </div>
 
@@ -43,11 +49,21 @@
 
             const permissionLevels = [-1, 0, 1];
 
+            const editModal = document.getElementById("edit-modal");
+
             permissionLevels.forEach((level, index, array) => {
                 Array.prototype.slice.call(document.getElementsByClassName("permission-level-" + level)).forEach((value, index, array) => {
                     value.style.display = level <= permissionLevel ? "" : "none";
                 });
             });
+
+            function showEditor() {
+                editModal.classList.add("showing-modal");
+            }
+
+            function hideEditor() {
+                editModal.classList.remove("showing-modal");
+            }
         </script>
     </body>
 </html>

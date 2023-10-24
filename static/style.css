@@ -43,7 +43,7 @@ body {
     flex-direction: row;
 }
 
-button, input {
+button, input, textarea {
     background-color: rgba(21, 0, 114, 0.767);
     border: 1px solid white;
     color: white;
@@ -136,4 +136,26 @@ a {
     padding: 16px;
     font-weight: lighter;
     font-size: 25px;
+}
+
+#edit-modal {
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.2s;
+}
+#edit-modal-buttons {
+    display: flex;
+    flex-direction: row;
+}
+#edit-modal textarea {
+    width: 90%;
+    height: 50%;
 }
